@@ -11,11 +11,3 @@ An application (multimusic-controller) is also available for control SnapCast Se
 ### Serve MultiMusic Controller
 Place builded MultiMusic Controller PWA in the /static folder
 The static folder is automatically serve on /
-
-### Build the app for production
-```bash
-quasar build
-```
-
-### Customize the configuration
-See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
