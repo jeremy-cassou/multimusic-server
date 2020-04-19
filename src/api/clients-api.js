@@ -17,4 +17,10 @@ router.put('/:clientId/volume/:volume', async (req, res) => {
   return res.json(await SnapState.getClient(clientId))
 })
 
+router.put('/:clientId/name/:name', async (req, res) => {
+  const { clientId, name } = req.params
+  await SnapActions.setName(clientId, name)
+  return res.json(await SnapState.getClient(clientId))
+})
+
 module.exports = router

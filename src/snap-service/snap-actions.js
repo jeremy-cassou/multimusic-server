@@ -10,6 +10,14 @@ async function setVolume (clientId, volume) {
   await SnapState.refreshState()
 }
 
+async function setName (clientId, name) {
+  await SnapAPI.sendRequest('Client.SetName', {
+    id: clientId,
+    name: name,
+  })
+  await SnapState.refreshState()
+}
+
 async function startPlaying (groupId) {
   await SnapAPI.sendRequest('Group.SetMute', {
     id: groupId,
@@ -105,6 +113,7 @@ async function init () {
 
 module.exports = {
   setVolume,
+  setName,
   startPlaying,
   stopPlaying,
   addTo,
