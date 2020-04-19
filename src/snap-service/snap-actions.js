@@ -85,29 +85,31 @@ async function ensureMasterStream (clientId) {
   const stream = await SnapState.getStream(streamId)
   const groups = await SnapState.getGroups()
 
-  // S'assure que le stream Spotify du client existe
-  if (!stream) {
-    await addStream(SpotifyStream.buildSpotifyStream({
-      streamId: streamId,
-      devicename: client.config.name || client.host.name,
-    }))
-  }
-
   // Cherche le groupe dont le client est maitre
   const group = groups.find(group =>
     group.clients.length && group.clients[0].id === client.id)
 
   // Si son groupe existe, utilise son stream Spotify
   if (group) {
+    // S'assure que le stream Spotify du client existe
+    if (!stream) {
+      await addStream(SpotifyStream.buildSpotifyStream({
+        streamId: streamId,
+        devicename: client.config.name || client.host.name,
+      }))
+    }
     await setStream(group.id, streamId)
+  } else if (stream) {
+    // Si le stream du client existe mais qu'il n'est pas maître
+    await removeStream(streamId)
   }
 }
 
 async function init () {
-  const groups = await SnapState.getGroups()
+  const clients = await SnapState.getClients()
 
-  return groups.reduce(async (promise, group) => {
-    return promise.then(() => ensureMasterStream(group.clients[0].id))
+  return clients.reduce(async (promise, client) => {
+    return promise.then(() => ensureMasterStream(client.id))
   }, Promise.resolve())
 }
 
